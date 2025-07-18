@@ -1,0 +1,16 @@
+Passo a passo:
+
+Criei a pasta do projeto do computador da Unesp
+Abri a pasta no Visual Studio code
+No terminal do VC Code:
+- Criei o ambiente virtual para o projeto com o comando python -m venv venv
+- Ativei o ambiente virtual para o Windos com o comando .\venv\Scripts\activate
+- Criei um git para o projeto com o comando git init
+- Criei o arquivo .gitignore com o comando echo > .gitignore
+Abri o arquivo .gitignore e inseri venv/ (para excluir a pasta do ambiente virtual do github)
+Criei um repositório remoto no github e com o projeto com o comando git remote add origin https://github.com/salenka/cc-chooser.git                                 
+(Mas eu poderia ter feito isso diretamente pelo VS Code após criar o git e realizar o primeiro commit)                           
+Instalei a biblioteca streamlit com o comando pip install streamlit
+Criei o arquivo cc.py e importei a biblioteca usando import streamlit as streamlit
+
+
