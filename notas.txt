@@ -13,4 +13,17 @@ Criei um repositório remoto no github e com o projeto com o comando git remote 
 Instalei a biblioteca streamlit com o comando pip install streamlit
 Criei o arquivo cc.py e importei a biblioteca usando import streamlit as streamlit
 
+===============================
 
+Foi decidido não usar st.form para não haver impedimentos de uso de função callback nas questões. Não sei o quanto isso ainda é
+válido usando funções no topo, como passei a fazer a partir da definição de q_reset.
+# with st.form("cc_chooser_form", clear_on_submit=False, enter_to_submit=True, border=True, width="stretch", height="content"):
+
+-----------------------
+
+
+        """
+        if st.session_state.get("q2") == "Não":
+            st.session_state.update("q3") = None
+            st.rerun()
+        """

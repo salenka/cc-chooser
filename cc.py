@@ -4,21 +4,30 @@ import streamlit as st
 st.title("Seletor de Licença Creative Commons")
 st.write("Olá, mundo!!!")
 
+def q_reset():
+    if st.session_state.get("q2") == "Não":
+        st.session_state.q3 = None
+        st.session_state.q4 = None
+        st.session_state.q5 = None
+        st.session_state.q_disabled = True  # 👈 Define no session_state
+    else:
+        st.session_state.q_disabled = False
+        
+
 #perguntas
-# with st.form("cc_chooser_form", clear_on_submit=False, enter_to_submit=True, border=True, width="stretch", height="content"):
 
 question1 = st.radio(
     "Você sabe qual é a licença que você precisa?", 
     ("Sim", "Não"), 
     index=None,
     key="q1", 
-    on_change=lambda: st.session_state.update(radio_changed=True) #sem isso, só muda qdo Submit é acionado
     ) 
 
 if st.session_state.get("q1") == "Sim":
     license = st.selectbox("", ["CC BY", "CC BY-SA", "CC BY-ND", "CC BY-NC", "CC BY-NC-SA", "CC BY-NC-ND", "CC0"], index=None, placeholder="Selecione a licença desejada")
     
 elif st.session_state.get("q1") == "Não":
+    
     cc_options = st.container()
     with cc_options:
         question2 = st.radio(
@@ -26,19 +35,13 @@ elif st.session_state.get("q1") == "Não":
             ("Sim", "Não"), 
             index=None, 
             key="q2",
-            # on_change=lambda: st.session_state.update(radio_changed=True) #sem isso, só muda qdo Submit é acionado
+            on_change=q_reset
             )
         
-        # Define o estado disabled para as demais questão se radio question2 = "Não"
-        disabled = st.session_state.get("q2") == "Não"
-
-        question3 = st.radio("Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=disabled)
-        question4 = st.radio("Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=disabled)
-        question5 = st.radio("Você deseja que obras derivadas de seu trabalho sejam disponibilizadas sob as mesmas condições?", ("Sim", "Não"), index=None, key="q5", disabled=disabled)
+        question3 = st.radio("Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=st.session_state.get("q_disabled", False))
+        question4 = st.radio("Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=st.session_state.get("q_disabled", False))
+        question5 = st.radio("Você deseja que obras derivadas de seu trabalho sejam disponibilizadas sob as mesmas condições?", ("Sim", "Não"), index=None, key="q5", disabled=st.session_state.get("q_disabled", False))
         
-
-    #lógica para exibir o resultado
-
 
 
 
