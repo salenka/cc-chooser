@@ -4,14 +4,27 @@ import streamlit as st
 st.title("Seletor de Licença Creative Commons")
 st.write("Olá, mundo!!!")
 
-def q_reset():
+# Inicialização dos estados
+if 'q2_disables' not in st.session_state:
+    st.session_state.q2_disables = False
+if 'q4_disables' not in st.session_state:
+    st.session_state.q4_disables = False
+
+def q_update():
     if st.session_state.get("q2") == "Não":
         st.session_state.q3 = None
         st.session_state.q4 = None
         st.session_state.q5 = None
-        st.session_state.q_disabled = True  # 👈 Define no session_state
+        st.session_state.q2_disables = True  # 👈 Define no session_state
     else:
-        st.session_state.q_disabled = False
+        st.session_state.q2_disables = False
+
+
+    if st.session_state.get("q4") == "Não":
+        st.session_state.q5 = None
+        st.session_state.q4_disables = True  # 👈 Define no session_state
+    else:
+        st.session_state.q4_disables = False
         
 
 #perguntas
@@ -35,12 +48,13 @@ elif st.session_state.get("q1") == "Não":
             ("Sim", "Não"), 
             index=None, 
             key="q2",
-            on_change=q_reset
+            on_change=q_update
             )
         
-        question3 = st.radio("Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=st.session_state.get("q_disabled", False))
-        question4 = st.radio("Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=st.session_state.get("q_disabled", False))
-        question5 = st.radio("Você deseja que obras derivadas de seu trabalho sejam disponibilizadas sob as mesmas condições?", ("Sim", "Não"), index=None, key="q5", disabled=st.session_state.get("q_disabled", False))
+        question3 = st.radio("Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=st.session_state.get("q2_disables", False))
+        question4 = st.radio("Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=st.session_state.get("q2_disables", False), on_change=q_update)
+        question5 = st.radio("Você deseja que obras derivadas de seu trabalho sejam disponibilizadas sob as mesmas condições?", ("Sim", "Não"), index=None, key="q5", 
+                             disabled=st.session_state.q2_disables or st.session_state.q4_disables)
         
 
 
