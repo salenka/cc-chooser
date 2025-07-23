@@ -22,6 +22,26 @@ válido usando funções no topo, como passei a fazer a partir da definição de
 -----------------------
 
 
+        question2 = st.radio(
+            2) "Você deseja que a autoria do seu trabalho seja atribuída a você, necessariamente?", 
+            ("Sim", "Não"), 
+            index=None, 
+            key="q2",
+            on_change=q_update
+            )
+        
+        question3 = st.radio("Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=st.session_state.get("q2_disables", False))
+        question4 = st.radio("Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=st.session_state.get("q2_disables", False), on_change=q_update)
+        question5 = st.radio("Você deseja que obras derivadas de seu trabalho sejam disponibilizadas sob as mesmas condições?", ("Sim", "Não"), index=None, key="q5", 
+                             disabled=st.session_state.q2_disables or st.session_state.q4_disables)
+
+
+
+
+
+
+
+Obras derivadas de seu trabalho devem ser disponibilizadas sob estas mesmas condições, necessariamente.
         """
         if st.session_state.get("q2") == "Não":
             st.session_state.update("q3") = None

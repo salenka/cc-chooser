@@ -1,33 +1,12 @@
 import streamlit as st
+from functions import q_update, render_html_file, render_license
+
 # para rodar o programa, no terminal: streamlit run cc.py
 
 st.title("Seletor de Licença Creative Commons")
 st.write("Olá, mundo!!!")
-
-# Inicialização dos estados
-if 'q2_disables' not in st.session_state:
-    st.session_state.q2_disables = False
-if 'q4_disables' not in st.session_state:
-    st.session_state.q4_disables = False
-
-def q_update():
-    if st.session_state.get("q2") == "Não":
-        st.session_state.q3 = None
-        st.session_state.q4 = None
-        st.session_state.q5 = None
-        st.session_state.q2_disables = True  # 👈 Define no session_state
-    else:
-        st.session_state.q2_disables = False
-
-
-    if st.session_state.get("q4") == "Não":
-        st.session_state.q5 = None
-        st.session_state.q4_disables = True  # 👈 Define no session_state
-    else:
-        st.session_state.q4_disables = False
-        
-
-#perguntas
+       
+# PERGUNTAS DO FORMULÁRIO
 
 question1 = st.radio(
     "Você sabe qual é a licença que você precisa?", 
@@ -37,14 +16,17 @@ question1 = st.radio(
     ) 
 
 if st.session_state.get("q1") == "Sim":
-    license = st.selectbox("", ["CC BY", "CC BY-SA", "CC BY-ND", "CC BY-NC", "CC BY-NC-SA", "CC BY-NC-ND", "CC0"], index=None, placeholder="Selecione a licença desejada")
+    license = st.selectbox("", ["CC-BY", "CC BY-SA", "CC BY-ND", "CC BY-NC", "CC BY-NC-SA", "CC BY-NC-ND", "CC0"], index=None, key="license_select", placeholder="Selecione a licença desejada")
+    
+    if license: 
+        render_license(license)
     
 elif st.session_state.get("q1") == "Não":
     
     cc_options = st.container()
     with cc_options:
         question2 = st.radio(
-            "Você deseja que a autoria do seu trabalho seja atribuída a você, necessariamente?", 
+            "Você requer que a autoria de seu trabalho seja atribuída a você?", 
             ("Sim", "Não"), 
             index=None, 
             key="q2",
@@ -53,7 +35,7 @@ elif st.session_state.get("q1") == "Não":
         
         question3 = st.radio("Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=st.session_state.get("q2_disables", False))
         question4 = st.radio("Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=st.session_state.get("q2_disables", False), on_change=q_update)
-        question5 = st.radio("Você deseja que obras derivadas de seu trabalho sejam disponibilizadas sob as mesmas condições?", ("Sim", "Não"), index=None, key="q5", 
+        question5 = st.radio("Você requer que obras derivadas de seu trabalho sejam disponibilizadas sob estas mesmas condições?", ("Sim", "Não"), index=None, key="q5", 
                              disabled=st.session_state.q2_disables or st.session_state.q4_disables)
         
 
@@ -64,6 +46,14 @@ elif st.session_state.get("q1") == "Não":
 
 
 
+
+
+
+
+st.button("Enviar")
+
+
+        
 
 
 
