@@ -1,43 +1,90 @@
 import streamlit as st
 from functions import q_update, render_html_file, render_license
 
-# para rodar o programa, no terminal: streamlit run cc.py
+# Inicialização dos estados das variáveis:
+st.session_state.setdefault('q4_disables', False)
+st.session_state.setdefault('q2_disables', False)
+license = ""
+submitted = None
 
 st.title("Seletor de Licença Creative Commons")
-st.write("Olá, mundo!!!")
-       
+      
 # PERGUNTAS DO FORMULÁRIO
 
 question1 = st.radio(
-    "Você sabe qual é a licença que você precisa?", 
+    "1\) Você sabe qual é a licença que você precisa?", 
     ("Sim", "Não"), 
     index=None,
     key="q1", 
     ) 
 
 if st.session_state.get("q1") == "Sim":
-    license = st.selectbox("", ["CC-BY", "CC BY-SA", "CC BY-ND", "CC BY-NC", "CC BY-NC-SA", "CC BY-NC-ND", "CC0"], index=None, key="license_select", placeholder="Selecione a licença desejada")
+    license = st.selectbox("", ["CC BY", "CC BY-SA", "CC BY-ND", "CC BY-NC", "CC BY-NC-SA", "CC BY-NC-ND", "CC0"], index=None, key="license_select", placeholder="Selecione a licença desejada")
+  
+else:
+    if st.session_state.get("q1") == "Não":
     
-    if license: 
+        cc_options = st.container()
+        with cc_options:
+            question2 = st.radio(
+                "2\) Você requer que a autoria de seu trabalho seja atribuída a você?", 
+                ("Sim", "Não"), 
+                index=None, 
+                key="q2",
+                on_change=q_update
+                )
+            
+            question3 = st.radio("3\) Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=st.session_state.get("q2_disables", False))
+            question4 = st.radio("4\) Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=st.session_state.get("q2_disables", False), on_change=q_update)
+            question5 = st.radio("5\) Você requer que obras derivadas de seu trabalho sejam disponibilizadas sob estas mesmas condições?", ("Sim", "Não"), index=None, key="q5", disabled=st.session_state.q2_disables or st.session_state.q4_disables)
+        
+        if st.session_state.get("q2") == "Não":
+            license = "CC0"
+            
+        else:
+
+            with st.form("cc_chooser_form", clear_on_submit=False, enter_to_submit=True, border=False, width="stretch", height="content"):
+
+                if st.session_state.get("q2") == "Sim":
+                    if st.session_state.get("q3") == "Sim":
+                        if st.session_state.get("q4") == "Não":
+                            license = "CC BY-ND"
+                        else:
+                            if st.session_state.get("q4") == "Sim":
+                                if st.session_state.get("q5") == "Sim":
+                                    license = "CC BY-SA"
+                                else:
+                                    if st.session_state.get("q5") == "Não":
+                                        license = "CC BY"
+                    else:
+                        if st.session_state.get("q3") == "Não":
+                            if st.session_state.get("q4") == "Não":    
+                                license = "CC BY-NC-ND"
+                            else:
+                                if st.session_state.get("q4") == "Sim": 
+                                    if st.session_state.get("q5") == "Não":
+                                        license = "CC BY-NC"
+                                    else:
+                                        if st.session_state.get("q5") == "Sim":
+                                            license = "CC BY-NC-SA"
+                     
+                submitted = st.form_submit_button("Enviar")
+
+if st.session_state.get("q1") == "Sim" or st.session_state.get("q2") == "Não":
+    if license:
+        st.subheader("A licença selecionada é")         
+        st.header(license)
         render_license(license)
+else:
+    if submitted:
+        if license: 
+            st.subheader("A licença selecionada é")         
+            st.header(license)
+            render_license(license)
+        else:
+            st.write("Responta a todas as perguntas ativadas")
+
     
-elif st.session_state.get("q1") == "Não":
-    
-    cc_options = st.container()
-    with cc_options:
-        question2 = st.radio(
-            "Você requer que a autoria de seu trabalho seja atribuída a você?", 
-            ("Sim", "Não"), 
-            index=None, 
-            key="q2",
-            on_change=q_update
-            )
-        
-        question3 = st.radio("Você aceita que seu trabalho seja usado com fins comerciais?", ("Sim", "Não"), index=None, key="q3", disabled=st.session_state.get("q2_disables", False))
-        question4 = st.radio("Você aceita que seu trabalho seja modificado, dando origem a uma obra derivada?", ("Sim", "Não"), index=None, key="q4", disabled=st.session_state.get("q2_disables", False), on_change=q_update)
-        question5 = st.radio("Você requer que obras derivadas de seu trabalho sejam disponibilizadas sob estas mesmas condições?", ("Sim", "Não"), index=None, key="q5", 
-                             disabled=st.session_state.q2_disables or st.session_state.q4_disables)
-        
 
 
 
@@ -50,7 +97,8 @@ elif st.session_state.get("q1") == "Não":
 
 
 
-st.button("Enviar")
+
+
 
 
         

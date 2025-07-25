@@ -13,6 +13,8 @@ Criei um repositório remoto no github e com o projeto com o comando git remote 
 Instalei a biblioteca streamlit com o comando pip install streamlit
 Criei o arquivo cc.py e importei a biblioteca usando import streamlit as streamlit
 
+# para RODAR O PROGRAMA, no terminal: streamlit run cc.py
+
 ===============================
 
 Foi decidido não usar st.form para não haver impedimentos de uso de função callback nas questões. Não sei o quanto isso ainda é
