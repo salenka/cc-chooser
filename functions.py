@@ -19,18 +19,12 @@ def q_update():
 
 # Carregar HTML
 def render_html_file(file_path):
-    #try:
     with open(file_path, "r", encoding="utf-8") as file:
-        st.markdown(file.read(), unsafe_allow_html=True)
-    #except FileNotFoundError:
-        #st.error(f"Arquivo HTML da licença não encontrado: {file_path}")
-    #except Exception as e:
-        #st.error(f"Erro ao carregar HTML: {str(e)}")
+        html_content = file.read()
+    # Carrega o CSS manualmente
+    with open("styles/style.css", "r", encoding="utf-8") as css_file:
+        css = f"<style>{css_file.read()}</style>"
+    st.markdown(css + html_content, unsafe_allow_html=True)
 
 def render_license(license):
         render_html_file(f"{license}_4.0.html")
-
-
-def licence_selection():
-    license_selecty = st.session_state.license_select
-    return st.toast(f"Selecionou: {license_selecty}")
