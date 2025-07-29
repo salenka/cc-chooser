@@ -7,7 +7,8 @@ st.session_state.setdefault('q2_disables', False)
 license = ""
 submitted = None
 
-st.title("Seletor de Licença Creative Commons")
+st.image("qualcc_logo.jpg", width=400)
+st.subheader("Selecione uma licença Creative Commons")
       
 # PERGUNTAS DO FORMULÁRIO
 
