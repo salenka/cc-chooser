@@ -73,13 +73,13 @@ else:
 
 if st.session_state.get("q1") == "Sim" or st.session_state.get("q2") == "Não":
     if license:
-        st.subheader("A licença selecionada é")         
+        st.subheader("A licença selecionada é")            
         render_license(license)
     else:
         render_html_file("CC-chooser.html")
 elif submitted:
     if license: 
-        st.subheader("A licença selecionada é")         
+        st.subheader("A licença selecionada é")       
         render_license(license)
     else:
         st.write("Responta a todas as perguntas ativadas")
